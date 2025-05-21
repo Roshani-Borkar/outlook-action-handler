@@ -19,6 +19,14 @@ app.post("/response", async (req, res) => {
   console.log("🔄 Received Adaptive Card response:", req.body);
 
   try {
+    console.log("Received body:", req.body);
+    console.log("Environment:", {
+      tenantId,
+      clientId,
+      siteId,
+      listId
+    });
+
     const token = await getAccessToken(tenantId, clientId, clientSecret);
 
     const url = `https://graph.microsoft.com/v1.0/sites/${siteId}/lists/${listId}/items/${ID}/fields`;
@@ -27,6 +35,8 @@ app.post("/response", async (req, res) => {
       Status: ApprovalStatus,
       Comments: Description
     };
+console.log("PATCH URL:", url);
+console.log("Payload:", updatePayload);
 
     await axios.patch(url, updatePayload, {
       headers: {
@@ -43,6 +53,8 @@ app.post("/response", async (req, res) => {
     });
 
   } catch (error) {
+    console.error("Full error:", error);
+
     console.error("❌ Error updating SharePoint:", error.response?.data || error.message);
     res.status(500).send({
       type: "MessageCard",
