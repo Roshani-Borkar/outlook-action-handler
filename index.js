@@ -1,28 +1,16 @@
-const express = require('express');
-const app = express();
-const port = process.env.PORT || 3000;
+app.post("/action", async (req, res) => {
+  const { ApprovalStatus, Description, ID, listName } = req.body;
 
-app.use(express.json());
+  console.log("✅ Received a response:");
+  console.log("ApprovalStatus:", ApprovalStatus);
+  console.log("Description:", Description);
+  console.log("ID:", ID);
+  console.log("List Name:", listName);
 
-// Endpoint to receive Outlook action responses
-app.post('/action', (req, res) => {
-  console.log('Received Action:', req.body);
+  // Here you can later add code to update SharePoint using Graph API
 
-  // Example: extract info from request
-  const action = req.body && req.body.action || "Unknown";
-
-  // Return a basic confirmation
-  res.json({
+  res.status(200).send({
     type: "MessageCard",
-    text: `✅ Action "${action}" received and processed.`
+    text: `✅ You selected: ${status}. Thank you!`
   });
 });
-
-app.get('/', (req, res) => {
-  res.send('Outlook Actionable Message handler is running!');
-});
-
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
-
