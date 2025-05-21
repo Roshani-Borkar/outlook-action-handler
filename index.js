@@ -44,6 +44,8 @@ app.post("/response", async (req, res) => {
       text: `❌ Error updating SharePoint: ${error.message}`
     });
   }
+  console.log("Received Adaptive Card response:", req.body);
+  res.status(200).send("✅ Action completed successfully.");
 });
 
 app.get("/", (req, res) => {
