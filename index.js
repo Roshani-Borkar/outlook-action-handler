@@ -16,6 +16,8 @@ const listId = process.env.LIST_ID;
 app.post("/response", async (req, res) => {
   const { ApprovalStatus, Description, ID } = req.body;
 
+  console.log("🔄 Received Adaptive Card response:", req.body);
+
   try {
     const token = await getAccessToken(tenantId, clientId, clientSecret);
 
@@ -33,19 +35,20 @@ app.post("/response", async (req, res) => {
       }
     });
 
+    console.log("✅ SharePoint list item updated successfully");
+
     res.status(200).send({
       type: "MessageCard",
       text: `✅ SharePoint item updated with status: ${ApprovalStatus}`
     });
+
   } catch (error) {
-    console.error("Error:", error.message);
+    console.error("❌ Error updating SharePoint:", error.response?.data || error.message);
     res.status(500).send({
       type: "MessageCard",
       text: `❌ Error updating SharePoint: ${error.message}`
     });
   }
-  console.log("Received Adaptive Card response:", req.body);
-  res.status(200).send("✅ Action completed successfully.");
 });
 
 app.get("/", (req, res) => {
@@ -53,4 +56,4 @@ app.get("/", (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
